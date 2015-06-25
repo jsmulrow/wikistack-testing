@@ -1,0 +1,19 @@
+/api/cars
+
+
+Create
+Read
+Update
+Delete
+
+GET    /api/cars  |  index
+POST   /api/cars  |  create a new car
+GET    /api/cars/1|  looking at the first car
+PUT    /api/cars/1|  updating car 1
+DELETE /api/cars/1|  removing car 1
+
+GET    /api/cats  |  index
+POST   /api/cats  |  create a new cat
+GET    /api/cats/1|  looking at the first cat
+PUT    /api/cats/1|  updating cat 1
+DELETE /api/cats/1|  removing cat 1
