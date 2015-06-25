@@ -17,28 +17,36 @@ var pageSchema = new mongoose.Schema({
 });
 
 pageSchema.virtual('full_route').get(function() {
-
-})
+  return "/wiki/"+this.url_name;
+});
 
 pageSchema.statics.findByTag = function(tag, cb) {
-  return this.find({tag: {$in: [tag]}}, cb);
+  return this.find({tags: {$in: tag}}, cb);
+};
+
+pageSchema.statics.getSimilar = function(urlName, tags, cb){
+  return this.find({tags: {$in: tags}, url_name: {$ne: urlName}}, cb);
 };
 
 pageSchema.path('tags').set(function(tagsString) {
     return tagsString
     .split(',')
     .map(function(tag) {
-      return tag.trim()
-    })
-})
+      return tag.trim();
+    });
+});
 
 pageSchema.pre('save', function(next) {
-  this.url_name = this.title
-    .toLowerCase()
+  this.url_name = computeURLName(this.title);
+
+  next();
+})
+
+var computeURLName = function(title){
+  return title.toLowerCase()
     .replace(/\s/ig, '_')
     .replace(/\W/ig,'');
-  next()
-})
+}
 
 var userSchema = new mongoose.Schema({
   name:  { first: String, last: String },
@@ -50,5 +58,6 @@ var User = mongoose.model('User', userSchema);
 
 module.exports = {
   Page: Page,
-  User: User
+  User: User,
+  compute: computeURLName
 };
